@@ -1,78 +1,23 @@
-//app.jsx
+import pandas as pd
+import numpy as np
 
-import React from 'react';
-import { Routes, Route, NavLink } from 'react-router-dom';
-import Home from './Home.jsx';
-import Contact from './Contact.jsx';
-import About from './About.jsx';
+df = pd.read_csv("training_find_s.csv")
 
-function App() {
-  return (
-    <div className="app-container">
-      <nav className="nav">
-        <NavLink to="/" className="nav-link" end>
-          Home
-        </NavLink>
-        <NavLink to="/about" className="nav-link">
-          About
-        </NavLink>
-        <NavLink to="/contact" className="nav-link">
-          Contact
-        </NavLink>
-      </nav>
-      <hr className="separator" />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </main>
-    </div>
-  );
-}
+attributes = np.array(df)[:, :-1]
+target = np.array(df)[:, -1]
 
-export default App;
+def find_s_algorithm(attributes, target):
+    for i, val in enumerate(target):
+        if val.lower() == "yes":
+           specific_hypothesis = attributes[i].copy()
+           break
 
+    for i, instance in enumerate(attributes):
+        if target[i].lower() == "yes":
+            for attr_index in range(len(specific_hypothesis)):
+                if instance[attr_index] != specific_hypothesis[attr_index]:
+                	specific_hypothesis[attr_index] = '?'
+    return specific_hypothesis
 
-//about.jsx
-
-import React from "react";
-
-const About = () => {
-  return (
-    <>
-    Welcome to the About page
-    </>
-  );
-};
-
-export default About;
-
-//contact.jsx
-
-import React from "react";
-
-const Contact = () => {
-  return (
-   <>
-   Welcome to the Contact page
-   </>
-  );
-};
-
-export default Contact;
-
-//home.jsx
-
-import React from "react";
-
-const Home = () => {
-  return (
-   <>
-    This is the Home page
-   </>
-  );
-};
-
-export default Home;
+final_hypothesis = find_s_algorithm(attributes, target)
+print("\nFinal Hypothesis:", final_hypothesis)

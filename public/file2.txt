@@ -1,131 +1,27 @@
-//lab7
+import matplotlib
+# matplotlib.use("Agg")
+%matplotlib inline
 
-import React, { useState } from "react";
-import "./index.css";
-import sampleimage from "./sample.jpg"; // Import the image
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from sklearn.datasets import fetch_california_housing
 
-const ProfileCard = ({ name, bio, initialBgColor }) => {
-const [bgColor, setBgColor] = useState(initialBgColor);
-const [hovered, setHovered] = useState(false);
+# df = pd.read_csv("California_housing.csv")
 
-const handleMouseEnter = () => {
-setHovered(true);
-setBgColor("linear-gradient(135deg, #FFD700, #FFA07A)");
-};
+df.head()
 
-const handleMouseLeave = () => {
-setHovered(false);
-setBgColor(initialBgColor);
-};
+corr_matrix = df.corr()
+# print("Correlation matrix: ", corr_matrix)
 
-return (
-<div
-className={`profile-card ${hovered ? "hovered" : ""}`}
-style={{ background: bgColor, color: hovered ? "#000000" : "#000000" }}
-onMouseEnter={handleMouseEnter}
-onMouseLeave={handleMouseLeave}
->
-<img src={sampleimage} alt={name} className="profile-pic" />
-<h2 className="profile-name">{name}</h2>
-<p className="profile-bio">{bio}</p>
-</div>
-);
-};
+plt.figure(figsize=(12, 8))
+sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
+plt.title("Correlation matrix for california housing features")
+plt.show()
+plt.close()
 
-const App = () => {
-return (
-<div className="app-container">
-<ProfileCard
-name="Dhoni"
-bio="Dhoni the cricketer"
-initialBgColor="linear-gradient(135deg, #ADD8E6, #E6E6FA)"
-/>
-</div>
-);
-};
-
-export default App;
-
-
-
-//index.css
-
-/* Profile Card Container */
-.profile-card {
-  width: 320px;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  transition: background-color 0.3s ease-in-out, transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: linear-gradient(135deg, #ffffff, #f8f9fa);
-  }
-  
-  /* Hover Effect */
-  .profile-card:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #e3e3e3, #ffffff);
-  }
-  
-  /* Profile Picture */
-  .profile-pic {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #007bff;
-  transition: border-color 0.3s ease;
-  }
-  
-  /* Profile Picture Hover Effect */
-  .profile-card:hover .profile-pic {
-  border-color: #0056b3;
-  }
-  
-  /* Profile Name */
-  .profile-name {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #333;
-  margin: 10px 0;
-  }
-  
-  /* Profile Bio */
-  .profile-bio {
-  font-size: 1rem;
-  color: #666;
-  margin: 0 15px;
-  }
-  
-  /* App Container */
-  .app-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f2f5;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 480px) {
-  .profile-card {
-  width: 90%;
-  padding: 15px;
-  }
-  
-  .profile-pic {
-  width: 80px;
-  height: 80px;
-  }
-  
-  .profile-name {
-  font-size: 1.4rem;
-  }
-  
-  .profile-bio {
-  font-size: 0.9rem;
-  }
-  }
+#pair plot
+g=sns.pairplot(df)
+g.fig.suptitle("Pairplot of california", y=1.02)
+plt.show()
+plt.close()
